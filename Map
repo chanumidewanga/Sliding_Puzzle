@@ -1,0 +1,14 @@
+class Map {
+    public int height;
+    public int width;
+    public PathNode start;
+    public PathNode finish;
+    public char[][] grid;
+
+
+    public Map(int height, int width) {
+        this.height = height;
+        this.width = width;
+        this.grid = new char[height][width];
+    }
+}
