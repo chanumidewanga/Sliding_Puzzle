@@ -1,0 +1,78 @@
+import java.util.*;
+
+public class PathFinder {
+
+    public static void shortestPathFinder(Map map) {
+
+        int[][] dirs = {{-1, 0}, {1, 0}, {0, -1}, {0, 1}}; // up, down, left, right
+
+        PathNode[][] visited = new PathNode[map.height][map.width];
+        PriorityQueue<PathNode> queue = new PriorityQueue<>(Comparator.comparingInt(c -> Math.abs(c.x - map.finish.x) + Math.abs(c.y - map.finish.y)));
+
+        queue.offer(map.start);
+
+        while (!queue.isEmpty()) {
+            PathNode current = queue.poll();
+
+            if (current.x == map.finish.x && current.y == map.finish.y) {
+                printPath(current);
+                return;
+            }
+
+            for (int[] dir : dirs) {
+                int new_X = current.x;
+                int new_Y = current.y;
+
+                while (isValidMove(map, new_X + dir[0], new_Y + dir[1])) {
+                    new_X += dir[0];
+                    new_Y += dir[1];
+
+                    if (map.grid[new_X][new_Y] == 'F') {
+                        printPath(new PathNode(new_X, new_Y, current));
+                        return;
+                    }
+                }
+
+                if (visited[new_X][new_Y] == null) {
+                    PathNode newCell = new PathNode(new_X, new_Y, current);
+                    visited[new_X][new_Y] = newCell;
+                    queue.offer(newCell);
+                }
+            }
+        }
+        System.out.println("No path found.");
+    }
+
+    private static boolean isValidMove(Map map, int x, int y) {
+        return x >= 0 && x < map.height && y >= 0 && y < map.width && map.grid[x][y] != '0';
+    }
+
+    private static void printPath(PathNode node) {
+        List<String> path = new ArrayList<>();
+        int order = 1;
+
+        while (node != null) {
+            if (node.parent == null) {
+                path.add(String.format("Start at (%d,%d)", node.y + 1, node.x + 1));
+            } else {
+                String direction = getDirection(node, node.parent);
+                path.add(String.format("Move %s to (%d,%d)", direction, node.y + 1, node.x + 1));
+            }
+            node = node.parent;
+        }
+
+        Collections.reverse(path);
+        for (String s : path) {
+            System.out.println(order + ". " + s);
+            order++;
+        }
+        System.out.println("Done!\n");
+    }
+
+    private static String getDirection(PathNode current, PathNode parent) {
+        if (parent.x < current.x) return "down";
+        else if (parent.x > current.x) return "up";
+        else if (parent.y < current.y) return "right";
+        else return "left";
+    }
+}
