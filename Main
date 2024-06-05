@@ -25,7 +25,7 @@ public class Main {
 
             } else if (option.equals("B") || option.equals("E")) {
                 String folderPath;
-
+            //Create folderpath
                 if (option.equals("B")) {
                     folderPath = "benchmark_series/";
 
@@ -39,7 +39,7 @@ public class Main {
                     fileName += ".txt";
                 }
 
-                String filePath = folderPath + fileName;
+                String filePath = folderPath + fileName; //Create file path
 
                 // Record start time
                 long startTime = System.nanoTime();
@@ -52,7 +52,7 @@ public class Main {
                     // Find the shortest path using A* algorithm
                     PathFinder.shortestPathFinder(map);
 
-                    // Record end time
+                    //Record end time
                     long endTime = System.nanoTime();
                     // calculate execution time in nanoseconds
                     long executionTime = endTime - startTime;
