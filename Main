@@ -1,0 +1,75 @@
+import java.io.FileNotFoundException;
+import java.util.Scanner;
+
+public class Main {
+
+    public static void main(String[] args) {
+        System.out.println("FIND SHORTEST PATH");
+
+        Scanner scanner = new Scanner(System.in);
+        String option;
+
+        while (true) {
+            // Display menu
+            System.out.println("\nSelect the folder you want to open : ");
+            System.out.println("B - Benchmark Series Folder");
+            System.out.println("E - Example Files Folder");
+            System.out.println("Q - Quit");
+            System.out.println("\nEnter choice (B/E/Q) :");
+
+            option = scanner.nextLine().trim().toUpperCase();
+
+            if (option.equals("Q")) {
+                System.out.println("Exiting the program...");
+                break; // Terminate the program and exit loop
+
+            } else if (option.equals("B") || option.equals("E")) {
+                String folderPath;
+
+                if (option.equals("B")) {
+                    folderPath = "benchmark_series/";
+
+                } else {
+                    folderPath = "examples/";
+                }
+
+                System.out.println("Enter fileName: ");
+                String fileName = scanner.nextLine().trim();
+                if (!fileName.endsWith(".txt")) {
+                    fileName += ".txt";
+                }
+
+                String filePath = folderPath + fileName;
+
+                // Record start time
+                long startTime = System.nanoTime();
+
+                try {
+                    // Parse the map from the file
+                    MapParser mapParser = new MapParser();
+                    Map map = mapParser.mapParser(filePath);
+
+                    // Find the shortest path using A* algorithm
+                    PathFinder.shortestPathFinder(map);
+
+                    // Record end time
+                    long endTime = System.nanoTime();
+                    // calculate execution time in nanoseconds
+                    long executionTime = endTime - startTime;
+
+                    System.out.println("Execution time in nanoseconds : " + executionTime);
+                    System.out.println("Execution time in milliseconds: " + (executionTime)/1_000_000);
+
+
+                } catch (FileNotFoundException e) {
+                    System.out.println("File not found: ");
+                } catch (Exception e) {
+                    System.out.println("Error occurred: " + e.getMessage());
+                }
+            } else {
+                System.out.println("Invalid input. Please choose B, E, or Q.");
+            }
+        }
+        scanner.close();
+    }
+}
