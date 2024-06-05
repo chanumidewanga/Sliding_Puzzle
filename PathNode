@@ -1,0 +1,10 @@
+public class PathNode {
+   
+
+    public PathNode(int x, int y, PathNode parent) {
+        this.x = x;
+        this.y = y;
+        this.parent = parent;
+        this.distance = (parent != null) ? parent.distance + Math.abs(parent.x - x) + Math.abs(parent.y - y) : 0;
+    }
+}
